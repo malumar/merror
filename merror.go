@@ -133,6 +133,37 @@ func UnWrap(err error) error {
 
 var pErr = &Error{}
 
+func IsNotFound(err error) bool {
+	return IsCode(err, ErrNotFoundCode)
+}
+
+func IsForbidden(err error) bool {
+	return IsCode(err, ErrForbiddenCode)
+}
+
+func IsUnauthorized(err error) bool {
+	return IsCode(err, ErrUnauthorizedCode)
+}
+
+func IsInternalServerError(err error) bool {
+	return IsCode(err, ErrInternalServerCode)
+}
+
+func IsUnprocessableEntity(err error) bool {
+	return IsCode(err, ErrUnprocessableEntity)
+}
+
+func IsCode(err error, code int) bool {
+	if err == nil {
+		return code == UndefinedErrorCode
+	}
+	if r, ok := err.(*Error); ok {
+
+		return r.Code() == code
+	}
+	return code == UndefinedErrorCode
+}
+
 func Code(err error) int {
 	if err == nil {
 		return UndefinedErrorCode

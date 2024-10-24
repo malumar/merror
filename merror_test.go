@@ -18,7 +18,21 @@ func TestCode(t *testing.T) {
 	assert.Equal(t, InternalServerErrorMessage, GetCode(ErrInternalServerCode, "blank"))
 	assert.Equal(t, UnprocessableMessage, GetCode(ErrUnprocessableEntity, "blank"))
 	assert.Equal(t, "blank", GetCode(UndefinedErrorCode, "blank"), "any error")
+}
 
+func TestIsCode(t *testing.T) {
+	assert.Equal(t, true, IsCode(NewNotFound(), ErrNotFoundCode))
+	assert.Equal(t, false, IsCode(NewNotFound(), ErrInternalServerCode))
+	assert.Equal(t, false, IsCode(nil, ErrInternalServerCode))
+	assert.Equal(t, true, IsCode(nil, UndefinedErrorCode))
+	assert.Equal(t, true, IsCode(errors.New("another error"), UndefinedErrorCode))
+	assert.Equal(t, false, IsCode(New(0, nil, "comment"), UndefinedErrorCode))
+
+	assert.Equal(t, true, IsNotFound(NewNotFound()))
+	assert.Equal(t, true, IsUnauthorized(NewUnauthorized()))
+	assert.Equal(t, true, IsForbidden(NewForbidden()))
+	assert.Equal(t, true, IsInternalServerError(NewInternalServer()))
+	assert.Equal(t, true, IsUnprocessableEntity(NewUnprocessableEntity()))
 }
 
 func TestSet(t *testing.T) {
