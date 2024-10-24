@@ -1,4 +1,4 @@
-module merror
+module github.com/malumar/merror
 
 go 1.22
 
